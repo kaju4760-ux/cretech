@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Credit Tracker • Udhar Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Hind:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08091a;
+  --surface: #10132a;
+  --card: #181c35;
+  --card2: #1f2440;
+  --border: #272d4e;
+  --accent: #6b5fff;
+  --accent2: #ff5e87;
+  --safe: #20e396;
+  --warn: #ffb020;
+  --danger: #ff3d5a;
+  --text: #eef0ff;
+  --text2: #7d88bb;
+  --r: 18px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  max-width: 480px;
+  margin: 0 auto;
+  min-height: 100vh;
+  padding-bottom: 92px;
+  overflow-x: hidden;
+}
+
+.en { font-family: 'Plus Jakarta Sans', sans-serif; }
+.hi { font-family: 'Hind', sans-serif; }
+
+/* ===== HEADER ===== */
+.header {
+  background: linear-gradient(180deg, #141830 0%, #08091a 100%);
+  padding: 20px 18px 16px;
+  position: sticky; top: 0; z-index: 100;
+  border-bottom: 1px solid var(--border);
+}
+.hdr-row { display: flex; justify-content: space-between; align-items: center; }
+.brand { display: flex; align-items: center; gap: 11px; }
+.brand-logo {
+  width: 42px; height: 42px; border-radius: 13px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.3rem; box-shadow: 0 4px 16px rgba(107,95,255,0.4);
+}
+.brand-words h1 {
+  font-size: 1.1rem; font-weight: 900; letter-spacing: -0.5px; line-height: 1;
+  background: linear-gradient(90deg, #a89bff, var(--accent2));
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.brand-words p {
+  font-size: 0.62rem; margin-top: 2px;
+  font-family: 'Hind', sans-serif; color: var(--text2);
+}
+.hdr-right { display: flex; gap: 8px; }
+.icon-pill {
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text2); padding: 7px 12px; border-radius: 20px;
+  font-size: 0.7rem; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; gap: 5px;
+  transition: all 0.2s;
+}
+.icon-pill:hover { border-color: var(--accent); color: var(--text); }
+.hdr-date {
+  margin-top: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.hdr-date-en { font-size: 0.7rem; color: var(--text2); font-weight: 600; }
+.hdr-date-hi { font-size: 0.65rem; color: var(--text2); font-family: 'Hind', sans-serif; opacity: 0.7; }
+
+/* ===== SUMMARY CARDS ===== */
+.sum-row {
+  display: flex; gap: 10px;
+  padding: 16px 16px 4px;
+  overflow-x: auto; scrollbar-width: none;
+}
+.sum-row::-webkit-scrollbar { display: none; }
+
+.sum-card {
+  min-width: 136px; flex-shrink: 0;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 14px 12px;
+  position: relative; overflow: hidden;
+}
+.sum-card::before {
+  content: ''; position: absolute;
+  top: -18px; right: -18px;
+  width: 72px; height: 72px; border-radius: 50%; opacity: 0.1;
+}
+.sc1::before { background: var(--accent); }
+.sc2::before { background: var(--accent2); }
+.sc3::before { background: var(--safe); }
+.sc4::before { background: var(--danger); }
+
+.sum-label-en {
+  font-size: 0.6rem; font-weight: 800; letter-spacing: 0.8px;
+  text-transform: uppercase; color: var(--text2);
+}
+.sum-label-hi {
+  font-size: 0.58rem; font-family: 'Hind', sans-serif;
+  color: var(--text2); opacity: 0.65; margin-top: 1px;
+}
+.sum-val {
+  font-size: 1.28rem; font-weight: 900; margin-top: 7px;
+  letter-spacing: -0.5px; line-height: 1;
+}
+.sc1 .sum-val { color: var(--accent); }
+.sc2 .sum-val { color: var(--accent2); }
+.sc3 .sum-val { color: var(--safe); }
+.sc4 .sum-val { color: var(--danger); }
+.sum-foot {
+  font-size: 0.62rem; color: var(--text2); margin-top: 5px;
+  display: flex; align-items: center; gap: 3px;
+}
+.sum-foot-hi { font-family: 'Hind', sans-serif; font-size: 0.6rem; }
+
+/* ===== TABS ===== */
+.tabs { display: flex; gap: 6px; padding: 14px 16px 4px; }
+.tab {
+  flex: 1; background: var(--card); border: 1px solid var(--border);
+  border-radius: 11px; padding: 8px 4px; cursor: pointer;
+  transition: all 0.2s; text-align: center;
+}
+.tab-en { font-size: 0.72rem; font-weight: 800; color: var(--text2); display: block; }
+.tab-hi { font-size: 0.55rem; font-family: 'Hind', sans-serif; color: var(--text2); opacity: 0.6; display: block; margin-top: 2px; }
+.tab.active { background: linear-gradient(135deg, var(--accent) 0%, #9b86ff 100%); border-color: transparent; }
+.tab.active .tab-en { color: #fff; }
+.tab.active .tab-hi { opacity: 0.8; color: #fff; }
+
+/* ===== SECTION ===== */
+.section { padding: 10px 16px; }
+.sec-hd { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.sec-title-en { font-size: 0.68rem; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: var(--text2); }
+.sec-title-hi { font-size: 0.6rem; font-family: 'Hind', sans-serif; color: var(--text2); opacity: 0.6; margin-top: 1px; }
+.badge-count {
+  font-size: 0.68rem; font-weight: 800; color: var(--accent);
+  background: var(--card2); padding: 3px 10px; border-radius: 20px;
+}
+
+/* ===== LOAN CARD ===== */
+.loan-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 14px 14px 13px;
+  margin-bottom: 11px; position: relative; overflow: hidden;
+  animation: fadeUp 0.3s ease;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.loan-card::after {
+  content: ''; position: absolute;
+  left: 0; top: 0; bottom: 0; width: 4px; border-radius: 4px 0 0 4px;
+}
+.loan-card.safe::after { background: var(--safe); }
+.loan-card.warn::after { background: var(--warn); }
+.loan-card.danger::after { background: var(--danger); }
+
+.lc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+.lc-name { font-size: 0.98rem; font-weight: 800; letter-spacing: -0.2px; }
+.lc-note { font-size: 0.62rem; font-family: 'Hind', sans-serif; color: var(--text2); margin-top: 2px; }
+.type-pill {
+  font-size: 0.58rem; font-weight: 800; text-transform: uppercase;
+  padding: 3px 9px; border-radius: 20px; letter-spacing: 0.5px;
+  white-space: nowrap; flex-shrink: 0;
+}
+.tp-loan { background: rgba(107,95,255,0.18); color: #a090ff; }
+.tp-credit { background: rgba(255,94,135,0.18); color: #ff8aab; }
+.tp-personal { background: rgba(32,227,150,0.18); color: var(--safe); }
+.tp-other { background: rgba(255,176,32,0.18); color: var(--warn); }
+
+.chips { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 10px; }
+.chip {
+  background: var(--card2); border-radius: 8px;
+  padding: 4px 9px; font-size: 0.65rem; color: var(--text2);
+  display: flex; align-items: center; gap: 3px;
+}
+.chip-en { font-weight: 700; color: var(--text); }
+.chip-hi { font-family: 'Hind', sans-serif; font-size: 0.6rem; }
+
+.prog-hd { display: flex; justify-content: space-between; margin-bottom: 5px; }
+.prog-en { font-size: 0.68rem; font-weight: 700; }
+.prog-hi { font-size: 0.6rem; font-family: 'Hind', sans-serif; color: var(--text2); }
+.prog-bar { height: 7px; background: var(--card2); border-radius: 10px; overflow: hidden; margin-bottom: 10px; }
+.prog-fill { height: 100%; border-radius: 10px; transition: width 0.6s ease; }
+.pf-safe { background: linear-gradient(90deg, var(--safe), #52f5c0); }
+.pf-warn { background: linear-gradient(90deg, var(--warn), #ffd060); }
+.pf-danger { background: linear-gradient(90deg, var(--danger), #ff7090); }
+
+.stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 11px; }
+.stat-box { background: var(--card2); border-radius: 10px; padding: 8px 5px; text-align: center; }
+.sb-val { font-size: 1rem; font-weight: 900; line-height: 1; }
+.sb-en { font-size: 0.52rem; font-weight: 700; text-transform: uppercase; color: var(--text2); letter-spacing: 0.3px; margin-top: 3px; }
+.sb-hi { font-size: 0.5rem; font-family: 'Hind', sans-serif; color: var(--text2); opacity: 0.6; }
+
+.lc-foot { display: flex; justify-content: space-between; align-items: center; }
+.due-pill {
+  font-size: 0.65rem; font-weight: 800; padding: 4px 10px;
+  border-radius: 20px; display: flex; align-items: center; gap: 4px;
+}
+.due-danger { background: rgba(255,61,90,0.18); color: var(--danger); }
+.due-warn { background: rgba(255,176,32,0.18); color: var(--warn); }
+.due-safe { background: rgba(32,227,150,0.18); color: var(--safe); }
+.due-pill .dhi { font-family: 'Hind', sans-serif; font-weight: 600; }
+
+.act-btns { display: flex; gap: 6px; }
+.act-btn {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: var(--card2); border: 1px solid var(--border);
+  color: var(--text2); font-size: 0.85rem; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s;
+}
+.act-btn.pay { color: var(--safe); border-color: rgba(32,227,150,0.3); }
+.act-btn.del:hover { color: var(--danger); border-color: var(--danger); }
+
+/* ===== UPCOMING ===== */
+.up-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 12px 14px;
+  display: flex; align-items: center; gap: 12px;
+  margin-bottom: 9px; animation: fadeUp 0.25s ease;
+}
+.up-days {
+  width: 52px; height: 52px; flex-shrink: 0;
+  border-radius: 14px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.ud-n { font-size: 1.3rem; font-weight: 900; line-height: 1; }
+.ud-l { font-size: 0.5rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; margin-top: 2px; }
+.ud-danger { background: rgba(255,61,90,0.18); color: var(--danger); }
+.ud-warn { background: rgba(255,176,32,0.18); color: var(--warn); }
+.ud-ok { background: rgba(107,95,255,0.18); color: var(--accent); }
+.up-info { flex: 1; min-width: 0; }
+.up-name { font-size: 0.88rem; font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.up-sub { font-size: 0.62rem; color: var(--text2); margin-top: 2px; }
+.up-sub .uh { font-family: 'Hind', sans-serif; }
+.up-emi { font-size: 1rem; font-weight: 900; color: var(--accent); white-space: nowrap; }
+
+/* ===== HISTORY ===== */
+.hist-item {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 13px; padding: 11px 13px;
+  display: flex; align-items: center; gap: 11px;
+  margin-bottom: 8px; animation: fadeUp 0.2s ease;
+}
+.hist-icon {
+  width: 36px; height: 36px; border-radius: 10px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center; font-size: 1rem;
+}
+.hi-paid { background: rgba(32,227,150,0.15); }
+.hi-add { background: rgba(107,95,255,0.15); }
+.hist-name { font-size: 0.83rem; font-weight: 700; }
+.hist-sub { font-size: 0.62rem; color: var(--text2); display: flex; gap: 4px; align-items: center; }
+.hist-sub .hsh { font-family: 'Hind', sans-serif; }
+.hist-amt { font-size: 0.9rem; font-weight: 800; margin-left: auto; white-space: nowrap; }
+.amt-paid { color: var(--safe); }
+.amt-add { color: var(--accent); }
+
+/* ===== EMPTY ===== */
+.empty {
+  text-align: center; padding: 50px 20px;
+  color: var(--text2);
+}
+.empty-ico { font-size: 3rem; margin-bottom: 12px; }
+.empty h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.empty p { font-size: 0.78rem; font-family: 'Hind', sans-serif; }
+
+/* ===== BOTTOM NAV ===== */
+.bnav {
+  position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+  width: 100%; max-width: 480px;
+  background: rgba(16,19,42,0.96);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid var(--border);
+  display: flex; justify-content: space-around;
+  padding: 10px 0 18px; z-index: 200;
+}
+.nav-btn {
+  display: flex; flex-direction: column; align-items: center; gap: 3px;
+  background: none; border: none; cursor: pointer;
+  color: var(--text2); padding: 0 16px; transition: color 0.2s;
+}
+.nav-ico { font-size: 1.25rem; }
+.nav-en { font-size: 0.58rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; }
+.nav-hi { font-size: 0.55rem; font-family: 'Hind', sans-serif; opacity: 0.7; }
+.nav-btn.active { color: var(--accent); }
+
+/* ===== FAB ===== */
+.fab {
+  position: fixed; bottom: 78px; right: max(16px, calc(50% - 224px));
+  width: 56px; height: 56px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none; border-radius: 50%; color: #fff;
+  font-size: 1.7rem; cursor: pointer; z-index: 300;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 6px 24px rgba(107,95,255,0.55);
+  transition: transform 0.2s, box-shadow 0.2s;
+  z-index: 250;
+}
+.fab:hover { transform: scale(1.08); box-shadow: 0 8px 32px rgba(107,95,255,0.7); }
+
+/* ===== MODAL ===== */
+.overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.8); z-index: 300;
+  align-items: flex-end; justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border-radius: 26px 26px 0 0;
+  padding: 22px 18px 40px; width: 100%; max-width: 480px;
+  max-height: 92vh; overflow-y: auto;
+  animation: slideUp 0.38s cubic-bezier(.16,1,.3,1);
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); } to { transform: translateY(0); }
+}
+.modal-handle { width: 38px; height: 4px; background: var(--border); border-radius: 2px; margin: 0 auto 18px; }
+.modal-title-en { font-size: 1.15rem; font-weight: 900; letter-spacing: -0.3px; }
+.modal-title-hi { font-size: 0.7rem; font-family: 'Hind', sans-serif; color: var(--text2); margin-top: 2px; margin-bottom: 18px; }
+
+.fgrp { margin-bottom: 14px; }
+.flabel { display: flex; align-items: baseline; gap: 6px; margin-bottom: 6px; }
+.fl-en { font-size: 0.68rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); }
+.fl-hi { font-size: 0.6rem; font-family: 'Hind', sans-serif; color: var(--text2); opacity: 0.65; }
+.finput, .fselect {
+  width: 100%; background: var(--card); border: 1.5px solid var(--border);
+  color: var(--text); padding: 11px 13px; border-radius: 12px;
+  font-size: 0.88rem; font-family: 'Plus Jakarta Sans', sans-serif;
+  outline: none; transition: border-color 0.2s; -webkit-appearance: none;
+}
+.finput:focus, .fselect:focus { border-color: var(--accent); }
+.finput::placeholder { color: var(--text2); font-size: 0.8rem; }
+.frow { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+.type-opt {
+  padding: 10px 8px; border-radius: 12px;
+  border: 1.5px solid var(--border); background: var(--card);
+  cursor: pointer; text-align: center; transition: all 0.2s;
+}
+.to-en { font-size: 0.78rem; font-weight: 800; color: var(--text2); display: block; }
+.to-hi { font-size: 0.6rem; font-family: 'Hind', sans-serif; color: var(--text2); opacity: 0.65; display: block; margin-top: 2px; }
+.type-opt.sel { border-color: var(--accent); background: rgba(107,95,255,0.15); }
+.type-opt.sel .to-en { color: var(--accent); }
+
+.btn-submit {
+  width: 100%; background: linear-gradient(135deg, var(--accent), #8b7bff);
+  border: none; color: #fff; padding: 14px;
+  border-radius: 14px; font-size: 0.95rem; font-weight: 800;
+  cursor: pointer; font-family: 'Plus Jakarta Sans', sans-serif;
+  margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  transition: opacity 0.2s;
+}
+.btn-submit .bhi { font-family: 'Hind', sans-serif; font-size: 0.82rem; opacity: 0.85; }
+.btn-submit:hover { opacity: 0.9; }
+.btn-cancel {
+  width: 100%; background: transparent;
+  border: 1.5px solid var(--border); color: var(--text2);
+  padding: 12px; border-radius: 14px;
+  font-size: 0.85rem; font-weight: 700; cursor: pointer;
+  font-family: 'Plus Jakarta Sans', sans-serif; margin-top: 8px;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.btn-cancel .bhi { font-family: 'Hind', sans-serif; font-size: 0.78rem; opacity: 0.7; }
+
+.page { display: none; }
+.page.active { display: block; }
+
+.toast {
+  position: fixed; bottom: 102px; left: 50%;
+  transform: translateX(-50%);
+  background: var(--card); border: 1px solid var(--border);
+  color: var(--text); padding: 9px 18px; border-radius: 20px;
+  font-size: 0.82rem; font-weight: 700; z-index: 999;
+  opacity: 0; transition: opacity 0.3s; white-space: nowrap;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.toast.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="header">
+  <div class="hdr-row">
+    <div class="brand">
+      <div class="brand-logo">💳</div>
+      <div class="brand-words">
+        <h1>Credit Tracker</h1>
+        <p>Udhar Manager • Kisht Reminder</p>
+      </div>
+    </div>
+    <div class="hdr-right">
+      <button class="icon-pill" onclick="showPage('upcoming',null)">🔔 <span>Due</span></button>
+    </div>
+  </div>
+  <div class="hdr-date">
+    <span class="hdr-date-en" id="dateEn"></span>
+    <span style="color:var(--border)">|</span>
+    <span class="hdr-date-hi" id="dateHi"></span>
+  </div>
+</header>
+
+<!-- SUMMARY CARDS -->
+<div class="sum-row">
+  <div class="sum-card sc1">
+    <div class="sum-label-en">Total Credit</div>
+    <div class="sum-label-hi">Kul Udhar</div>
+    <div class="sum-val" id="sTotal">₹0</div>
+    <div class="sum-foot"><span id="sCount">0</span>&nbsp;<span class="sum-foot-hi">entries</span></div>
+  </div>
+  <div class="sum-card sc2">
+    <div class="sum-label-en">Remaining</div>
+    <div class="sum-label-hi">Abhi Baki</div>
+    <div class="sum-val" id="sRemain">₹0</div>
+    <div class="sum-foot"><span id="sRemInst">0</span>&nbsp;<span class="sum-foot-hi">Kishte Baki</span></div>
+  </div>
+  <div class="sum-card sc3">
+    <div class="sum-label-en">Paid</div>
+    <div class="sum-label-hi">Chukaya</div>
+    <div class="sum-val" id="sPaid">₹0</div>
+    <div class="sum-foot"><span id="sPaidInst">0</span>&nbsp;<span class="sum-foot-hi">Kishte Di</span></div>
+  </div>
+  <div class="sum-card sc4">
+    <div class="sum-label-en">Overdue</div>
+    <div class="sum-label-hi">Late Ho Gaya</div>
+    <div class="sum-val" id="sOver">0</div>
+    <div class="sum-foot"><span class="sum-foot-hi">Turant Do!</span></div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="switchTab(this,'all')">
+    <span class="tab-en">All</span>
+    <span class="tab-hi">Sabhi</span>
+  </button>
+  <button class="tab" onclick="switchTab(this,'loan')">
+    <span class="tab-en">Loan</span>
+    <span class="tab-hi">Loan</span>
+  </button>
+  <button class="tab" onclick="switchTab(this,'credit')">
+    <span class="tab-en">Credit</span>
+    <span class="tab-hi">Credit</span>
+  </button>
+  <button class="tab" onclick="switchTab(this,'personal')">
+    <span class="tab-en">Personal</span>
+    <span class="tab-hi">Personal</span>
+  </button>
+</div>
+
+<!-- PAGES -->
+<div id="pg-home" class="page active">
+  <div class="section">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title-en">Active Credits</div>
+        <div class="sec-title-hi">Chal Rahe Udhar</div>
+      </div>
+      <span class="badge-count" id="activeCount">0</span>
+    </div>
+    <div id="loanList"></div>
+    <div class="empty" id="emptyHome" style="display:none">
+      <div class="empty-ico">📋</div>
+      <h3>No Credits Added</h3>
+      <p>+ button dabake naya udhar jodein</p>
+    </div>
+  </div>
+</div>
+
+<div id="pg-upcoming" class="page">
+  <div class="section">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title-en">Upcoming EMIs</div>
+        <div class="sec-title-hi">Aane Wali Kishte</div>
+      </div>
+    </div>
+    <div id="upcomingList"></div>
+  </div>
+</div>
+
+<div id="pg-history" class="page">
+  <div class="section">
+    <div class="sec-hd">
+      <div>
+        <div class="sec-title-en">Payment History</div>
+        <div class="sec-title-hi">Bhugtaan History</div>
+      </div>
+    </div>
+    <div id="histList"></div>
+    <div class="empty" id="emptyHist" style="display:none">
+      <div class="empty-ico">📅</div>
+      <h3>No History Yet</h3>
+      <p>Kisht dene par yahan dikhega</p>
+    </div>
+  </div>
+</div>
+
+<!-- FAB -->
+<button class="fab" onclick="openModal()">+</button>
+
+<!-- BOTTOM NAV -->
+<nav class="bnav">
+  <button class="nav-btn active" onclick="showPage('home',this)">
+    <span class="nav-ico">🏠</span>
+    <span class="nav-en">Home</span>
+    <span class="nav-hi">Home</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('upcoming',this)">
+    <span class="nav-ico">📅</span>
+    <span class="nav-en">EMIs</span>
+    <span class="nav-hi">Kishte</span>
+  </button>
+  <button class="nav-btn" onclick="showPage('history',this)">
+    <span class="nav-ico">📋</span>
+    <span class="nav-en">History</span>
+    <span class="nav-hi">History</span>
+  </button>
+</nav>
+
+<!-- ADD MODAL -->
+<div class="overlay" id="addModal">
+  <div class="modal">
+    <div class="modal-handle"></div>
+    <div class="modal-title-en">➕ Add New Credit</div>
+    <div class="modal-title-hi">Naya udhar jodein</div>
+
+    <div class="fgrp">
+      <div class="flabel">
+        <span class="fl-en">Name / Kisse liya</span>
+        <span class="fl-hi">*</span>
+      </div>
+      <input class="finput" id="fName" type="text" placeholder="e.g. SBI Loan, Rahul se liya, HDFC Card">
+    </div>
+
+    <div class="fgrp">
+      <div class="flabel">
+        <span class="fl-en">Type</span>
+        <span class="fl-hi">Prakar chunein</span>
+      </div>
+      <div class="type-grid">
+        <button class="type-opt sel" onclick="selType(this,'loan')">
+          <span class="to-en">🏦 Bank Loan</span>
+          <span class="to-hi">Bank Loan</span>
+        </button>
+        <button class="type-opt" onclick="selType(this,'credit')">
+          <span class="to-en">💳 Credit Card</span>
+          <span class="to-hi">Credit Card</span>
+        </button>
+        <button class="type-opt" onclick="selType(this,'personal')">
+          <span class="to-en">🤝 Personal</span>
+          <span class="to-hi">Personal Udhar</span>
+        </button>
+        <button class="type-opt" onclick="selType(this,'other')">
+          <span class="to-en">📦 Other</span>
+          <span class="to-hi">Anya</span>
+        </button>
+      </div>
+      <input type="hidden" id="fType" value="loan">
+    </div>
+
+    <div class="frow">
+      <div class="fgrp">
+        <div class="flabel"><span class="fl-en">Total Amount</span><span class="fl-hi">Kul Rakam ₹</span></div>
+        <input class="finput" id="fTotal" type="number" placeholder="e.g. 50000">
+      </div>
+      <div class="fgrp">
+        <div class="flabel"><span class="fl-en">EMI Amount</span><span class="fl-hi">Har Kisht ₹</span></div>
+        <input class="finput" id="fEmi" type="number" placeholder="e.g. 2500">
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fgrp">
+        <div class="flabel"><span class="fl-en">Start Date</span><span class="fl-hi">Shuru ki Tarikh</span></div>
+        <input class="finput" id="fStart" type="date">
+      </div>
+      <div class="fgrp">
+        <div class="flabel"><span class="fl-en">Total EMIs</span><span class="fl-hi">Kul Kishte</span></div>
+        <input class="finput" id="fTenure" type="number" placeholder="e.g. 24">
+      </div>
+    </div>
+
+    <div class="frow">
+      <div class="fgrp">
+        <div class="flabel"><span class="fl-en">Due Day</span><span class="fl-hi">Har mahine kitni tarikh ko</span></div>
+        <input class="finput" id="fDue" type="number" placeholder="e.g. 5" min="1" max="31">
+      </div>
+      <div class="fgrp">
+        <div class="flabel"><span class="fl-en">Interest %</span><span class="fl-hi">Byaj dar (optional)</span></div>
+        <input class="finput" id="fRate" type="number" placeholder="e.g. 12" step="0.1">
+      </div>
+    </div>
+
+    <div class="fgrp">
+      <div class="flabel"><span class="fl-en">Note</span><span class="fl-hi">Koi note (optional)</span></div>
+      <input class="finput" id="fNote" type="text" placeholder="e.g. SBI bank EMI, minimum due bharna hai...">
+    </div>
+
+    <button class="btn-submit" onclick="addLoan()">
+      ✅ Save Credit <span class="bhi">• Udhar Jodein</span>
+    </button>
+    <button class="btn-cancel" onclick="closeModal()">
+      Cancel <span class="bhi">• Radd Karein</span>
+    </button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let loans = JSON.parse(localStorage.getItem('ct_loans') || '[]');
+let hist  = JSON.parse(localStorage.getItem('ct_hist')  || '[]');
+let curTab = 'all';
+
+window.addEventListener('DOMContentLoaded', () => {
+  setDates();
+  document.getElementById('fStart').valueAsDate = new Date();
+  loadDemo();
+  render();
+});
+
+function setDates() {
+  const d = new Date();
+  const eDays = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const eMons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const hDays = ['Raviwar','Somwar','Mangalwar','Budhwar','Guruwar','Shukravar','Shaniwar'];
+  const hMons = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('dateEn').textContent = `${eDays[d.getDay()]}, ${d.getDate()} ${eMons[d.getMonth()]} ${d.getFullYear()}`;
+  document.getElementById('dateHi').textContent = `${hDays[d.getDay()]}, ${d.getDate()} ${hMons[d.getMonth()]}`;
+}
+
+function save() {
+  localStorage.setItem('ct_loans', JSON.stringify(loans));
+  localStorage.setItem('ct_hist',  JSON.stringify(hist));
+}
+
+function stats(loan) {
+  const start = new Date(loan.startDate);
+  const today = new Date(); today.setHours(0,0,0,0);
+  let mo = (today.getFullYear() - start.getFullYear())*12 + (today.getMonth() - start.getMonth());
+  if (today.getDate() >= loan.dueDay) mo++;
+  const paid = Math.min(Math.max(0, mo) + (loan.xPaid||0), loan.tenure);
+  const rem  = Math.max(0, loan.tenure - paid);
+  const pAmt = Math.min(paid * loan.emi, loan.total);
+  const rAmt = Math.max(0, loan.total - pAmt);
+  const next = nextDue(loan);
+  const diff = Math.ceil((next - today) / 864e5);
+  const status = diff < 0 ? 'danger' : diff <= 5 ? 'warn' : 'safe';
+  return { paid, rem, pAmt, rAmt, next, diff, status, pct: (paid/loan.tenure)*100 };
+}
+
+function nextDue(loan) {
+  const t = new Date(); t.setHours(0,0,0,0);
+  let d = new Date(t.getFullYear(), t.getMonth(), loan.dueDay);
+  if (d < t) d = new Date(t.getFullYear(), t.getMonth()+1, loan.dueDay);
+  return d;
+}
+
+function fmt(n) {
+  if (n >= 1e5) return '₹'+(n/1e5).toFixed(1)+'L';
+  if (n >= 1e3) return '₹'+(n/1e3).toFixed(1)+'K';
+  return '₹'+n;
+}
+
+function fmtDate(d) {
+  const m = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return `${d.getDate()} ${m[d.getMonth()]} ${d.getFullYear()}`;
+}
+
+function render() { updateSummary(); renderLoans(); renderUpcoming(); renderHistory(); }
+
+function updateSummary() {
+  let tA=0, rA=0, pA=0, ov=0, ri=0, pi=0;
+  loans.forEach(l => {
+    const s = stats(l);
+    tA+=l.total; rA+=s.rAmt; pA+=s.pAmt;
+    if (s.status==='danger') ov++;
+    ri+=s.rem; pi+=s.paid;
+  });
+  document.getElementById('sTotal').textContent   = fmt(tA);
+  document.getElementById('sRemain').textContent  = fmt(rA);
+  document.getElementById('sPaid').textContent    = fmt(pA);
+  document.getElementById('sOver').textContent    = ov;
+  document.getElementById('sCount').textContent   = loans.length;
+  document.getElementById('sRemInst').textContent = ri;
+  document.getElementById('sPaidInst').textContent= pi;
+  document.getElementById('activeCount').textContent = loans.length;
+}
+
+function renderLoans() {
+  const list = document.getElementById('loanList');
+  const empty = document.getElementById('emptyHome');
+  let data = curTab === 'all' ? loans : loans.filter(l => l.type === curTab);
+  data = data.slice().sort((a,b) => stats(a).diff - stats(b).diff);
+
+  if (!data.length) { list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display = 'none';
+
+  const typeLabel = { loan:'Bank Loan', credit:'Credit Card', personal:'Personal', other:'Other' };
+  const typeClass = { loan:'tp-loan', credit:'tp-credit', personal:'tp-personal', other:'tp-other' };
+
+  list.innerHTML = data.map(loan => {
+    const s = stats(loan);
+    const pfc = s.status==='danger' ? 'pf-danger' : s.status==='warn' ? 'pf-warn' : 'pf-safe';
+    const duc = s.status==='danger' ? 'due-danger' : s.status==='warn' ? 'due-warn' : 'due-safe';
+    const dueEn = s.diff < 0 ? `${Math.abs(s.diff)} days overdue!` : s.diff===0 ? 'Due Today!' : `${s.diff} days left`;
+    const dueHi = s.diff < 0 ? `${Math.abs(s.diff)} din late!` : s.diff===0 ? 'Aaj dena hai!' : `${s.diff} din baki`;
+    const emoji = s.status==='danger' ? '🔴' : s.status==='warn' ? '🟡' : '🟢';
+
+    return `<div class="loan-card ${s.status}">
+      <div class="lc-top">
+        <div>
+          <div class="lc-name">${loan.name}</div>
+          ${loan.note ? `<div class="lc-note">${loan.note}</div>` : ''}
+        </div>
+        <span class="type-pill ${typeClass[loan.type]}">${typeLabel[loan.type]}</span>
+      </div>
+      <div class="chips">
+        <span class="chip">💰 Total: <span class="chip-en">${fmt(loan.total)}</span></span>
+        <span class="chip">📅 EMI: <span class="chip-en">₹${loan.emi.toLocaleString()}</span></span>
+        <span class="chip">🗓️ <span class="chip-hi">Har</span>&nbsp;<span class="chip-en">${loan.dueDay}</span>&nbsp;<span class="chip-hi">tarikh</span></span>
+        ${loan.rate ? `<span class="chip">📊 <span class="chip-en">${loan.rate}%</span>&nbsp;<span class="chip-hi">byaj</span></span>` : ''}
+      </div>
+      <div class="prog-hd">
+        <span class="prog-en">EMI Progress: <strong>${s.paid}/${loan.tenure}</strong></span>
+        <span class="prog-hi">${s.rem} kisht baki</span>
+      </div>
+      <div class="prog-bar"><div class="prog-fill ${pfc}" style="width:${s.pct}%"></div></div>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <div class="sb-val" style="color:var(--safe)">${s.paid}</div>
+          <div class="sb-en">Paid</div>
+          <div class="sb-hi">Di gayi</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-val" style="color:var(--accent2)">${s.rem}</div>
+          <div class="sb-en">Left</div>
+          <div class="sb-hi">Baki</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-val" style="color:var(--accent)">${fmt(s.pAmt)}</div>
+          <div class="sb-en">Paid ₹</div>
+          <div class="sb-hi">Chukaya</div>
+        </div>
+        <div class="stat-box">
+          <div class="sb-val" style="color:var(--warn)">${fmt(s.rAmt)}</div>
+          <div class="sb-en">Due ₹</div>
+          <div class="sb-hi">Baki rakam</div>
+        </div>
+      </div>
+      <div class="lc-foot">
+        <span class="due-pill ${duc}">${emoji} ${dueEn} <span class="dhi">• ${dueHi}</span></span>
+        <div class="act-btns">
+          <button class="act-btn pay" onclick="payEMI('${loan.id}')" title="Mark EMI Paid • Kisht Di">✓</button>
+          <button class="act-btn del" onclick="delLoan('${loan.id}')" title="Delete • Hatayein">🗑</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderUpcoming() {
+  const list = document.getElementById('upcomingList');
+  if (!loans.length) {
+    list.innerHTML = `<div class="empty"><div class="empty-ico">📅</div><h3>No Credits</h3><p>Pehle udhar jodein</p></div>`;
+    return;
+  }
+  const data = loans.slice().map(l=>({...l,s:stats(l)}))
+    .filter(l=>l.s.rem>0).sort((a,b)=>a.s.diff-b.s.diff);
+
+  const typeLabel2 = { loan:'🏦 Bank Loan', credit:'💳 Credit Card', personal:'🤝 Personal', other:'📦 Other' };
+
+  list.innerHTML = data.map(loan => {
+    const s = loan.s;
+    const dc = s.status==='danger'?'ud-danger':s.status==='warn'?'ud-warn':'ud-ok';
+    const lbl = s.diff<0?'Late':'Days';
+    return `<div class="up-card">
+      <div class="up-days ${dc}">
+        <div class="ud-n">${Math.abs(s.diff)}</div>
+        <div class="ud-l">${lbl}</div>
+      </div>
+      <div class="up-info">
+        <div class="up-name">${loan.name}</div>
+        <div class="up-sub">${typeLabel2[loan.type]} • ${fmtDate(s.next)} • <span class="uh">${s.rem} kisht baki</span></div>
+      </div>
+      <div class="up-emi">₹${loan.emi.toLocaleString()}</div>
+    </div>`;
+  }).join('') || `<div class="empty"><div class="empty-ico">✅</div><h3>All Clear!</h3><p>Sabhi kishte de di hain 🎉</p></div>`;
+}
+
+function renderHistory() {
+  const list = document.getElementById('histList');
+  const empty = document.getElementById('emptyHist');
+  if (!hist.length) { list.innerHTML=''; empty.style.display='block'; return; }
+  empty.style.display='none';
+  list.innerHTML = hist.slice().reverse().map(h => `
+    <div class="hist-item">
+      <div class="hist-icon ${h.type==='paid'?'hi-paid':'hi-add'}">${h.type==='paid'?'✅':'➕'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="hist-name">${h.name}</div>
+        <div class="hist-sub">${h.date} <span class="hsh">• ${h.type==='paid'?'EMI Paid • Kisht Di':'Added • Joda'}</span></div>
+      </div>
+      <div class="hist-amt ${h.type==='paid'?'amt-paid':'amt-add'}">${h.type==='paid'?'-':'+'}₹${Number(h.amount).toLocaleString()}</div>
+    </div>`).join('');
+}
+
+function selType(btn, t) {
+  document.querySelectorAll('.type-opt').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  document.getElementById('fType').value = t;
+}
+
+function openModal()  { document.getElementById('addModal').classList.add('open'); }
+function closeModal() { document.getElementById('addModal').classList.remove('open'); clearForm(); }
+
+function clearForm() {
+  ['fName','fTotal','fEmi','fTenure','fDue','fRate','fNote'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fStart').valueAsDate = new Date();
+  document.getElementById('fType').value = 'loan';
+  document.querySelectorAll('.type-opt').forEach((b,i)=>b.classList.toggle('sel',i===0));
+}
+
+function addLoan() {
+  const name  = document.getElementById('fName').value.trim();
+  const total = +document.getElementById('fTotal').value;
+  const emi   = +document.getElementById('fEmi').value;
+  const tenure= +document.getElementById('fTenure').value;
+  const dueDay= +document.getElementById('fDue').value;
+  const start = document.getElementById('fStart').value;
+  const type  = document.getElementById('fType').value;
+  const rate  = +document.getElementById('fRate').value || 0;
+  const note  = document.getElementById('fNote').value.trim();
+
+  if (!name||!total||!emi||!tenure||!dueDay||!start) {
+    showToast('⚠️ Sabhi zaruri fields bharein • Fill all required fields'); return;
+  }
+  const loan = { id: Date.now()+'', name, total, emi, tenure, dueDay, startDate:start, type, rate, note, xPaid:0 };
+  loans.push(loan);
+  hist.push({ name, amount:total, type:'added', date:fmtDate(new Date()), id:loan.id });
+  save(); render(); closeModal();
+  showToast('✅ Credit added! • Udhar joda gaya!');
+}
+
+function payEMI(id) {
+  const l = loans.find(x=>x.id===id);
+  if (!l) return;
+  const s = stats(l);
+  if (s.rem<=0) { showToast('✅ All EMIs done! • Sabhi kishte de di!'); return; }
+  l.xPaid = (l.xPaid||0)+1;
+  hist.push({ name:l.name, amount:l.emi, type:'paid', date:fmtDate(new Date()), id });
+  const ns = stats(l);
+  save(); render();
+  showToast(ns.rem<=0
+    ? `🎉 ${l.name} fully paid! • Pura chuka diya!`
+    : `✅ EMI Paid! ${ns.rem} remaining • ${ns.rem} kisht baki`);
+}
+
+function delLoan(id) {
+  if (!confirm('Delete this credit?\nIse hatana chahte hain?')) return;
+  loans = loans.filter(l=>l.id!==id);
+  save(); render();
+  showToast('🗑️ Deleted • Hataya gaya');
+}
+
+function showPage(pg, btn) {
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pg-'+pg).classList.add('active');
+  if (btn) {
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  render();
+}
+
+function switchTab(btn, tab) {
+  curTab = tab;
+  document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderLoans();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 2800);
+}
+
+document.getElementById('addModal').addEventListener('click', e=>{
+  if (e.target===document.getElementById('addModal')) closeModal();
+});
+
+function loadDemo() {
+  if (loans.length) return;
+  const t = new Date();
+  const m = d => { const x=new Date(t); x.setMonth(x.getMonth()+d); return x.toISOString().split('T')[0]; };
+  loans = [
+    { id:'d1', name:'SBI Home Loan', total:500000, emi:8500, tenure:60, dueDay:5,  startDate:m(-3), type:'loan',     rate:8.5, note:'SBI Bank EMI every 5th', xPaid:0 },
+    { id:'d2', name:'HDFC Credit Card', total:35000, emi:5000, tenure:7, dueDay:15, startDate:m(-1), type:'credit', rate:36,  note:'Minimum due bharna hai', xPaid:0 },
+    { id:'d3', name:'Rohit se liya', total:15000, emi:3000, tenure:5, dueDay:1,   startDate:m(-1), type:'personal',rate:0,   note:'Dost ka paisa', xPaid:0 },
+  ];
+  save();
+}
+</script>
+</body>
+</html>
