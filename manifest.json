@@ -1,6 +1,6 @@
 {
   "name": "Credit Tracker - Udhar Manager",
-  "short_name": "Mera Paisa",
+  "short_name": "CreTech",
   "start_url": "/cretech/index.html",
   "scope": "/cretech/",
   "display": "standalone",
